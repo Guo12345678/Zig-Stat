@@ -1,2 +1,2 @@
-# Zig-Stat
-A basic statistics library for the zig language
+# Zig-Stat-Lib
+ A basic statistics library for the zig language
