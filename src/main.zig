@@ -107,3 +107,9 @@ pub fn main() void {
     // std.debug.print("Range (f32): {}\n", .{range_f32});
     // std.debug.print("Range (f64): {}\n", .{range_f64});
 }
+
+test "what are we testing today" {
+    const data_f64 = [_]f64{ 1.0, 2.0, 3.0, 4.0, 5.0 };
+    const med = median(f64, data_f64[0..]);
+    try std.testing.expectEqual(med, 3.0);
+}
