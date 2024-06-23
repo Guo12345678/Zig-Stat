@@ -2,19 +2,19 @@ const builtin = @import("builtin");
 const std = @import("std");
 const float = @import("float");
 
-// fn mean(comptime T: type, arr: []const T) T {
-//     if (arr.len == 0) {
-//         return 0.0;
-//     }
+fn mean(comptime T: type, arr: []const T) T {
+     if (arr.len == 0) {
+         return 0.0;
+     }
 
-//     var sum = 0.0;
-//     for (arr) |value| {
-//         sum += value;
-//     }
-//     const fsum: T = @floatCast(sum);
-//     const flen: T = @floatCast(arr.len);
-//     return fsum / flen;
-// }
+     var sum: T = 0.0;
+     for (arr) |value| {
+         sum += value;
+     }
+     const fsum: T = @floatCast(sum);
+     const flen: T = @floatFromInt(arr.len);
+     return fsum / flen;
+ }
 
 fn median(comptime T: type, arr: []const T) ?T {
     if (arr.len == 0) return null;
@@ -35,7 +35,7 @@ fn median(comptime T: type, arr: []const T) ?T {
         return sorted_arr[mid];
     }
 }
-fn mode(comptime T: type, arr: []const T) ?T {
+//fn mode(comptime T: type, arr: []const T) ?T {
     if (arr.len == 0) return null;
 
     var frequency_map = std.AutoHashMap(T, usize).init(std.heap.page_allocator);
@@ -83,29 +83,29 @@ fn range(comptime T: type, arr: []const T) ?T {
 }
 
 pub fn main() void {
-    const data_f32 = [_]f32{ 1.0, 2.0, 3.0, 4.0, 5.0 };
-    const data_f64 = [_]f64{ 1.0, 2.0, 3.0, 4.0, 5.0 };
+    const data_f32 = [_]f32{ 1.0, 2.0, 3.0, 4.0, 5.0, 7.0 };
+    const data_f64 = [_]f64{ 1.0, 2.0, 3.0, 4.0, 5.0, 7.0 };
 
-    // const mean_f32 = mean(f32, data_f32[0..]);
-    // const mean_f64 = mean(f64, data_f64[0..]);
+    const mean_f32 = mean(f32, data_f32[0..]);
+    const mean_f64 = mean(f64, data_f64[0..]);
 
-    // const mode_f32 = mode(f32, data_f32[0..]);
-    // const mode_f64 = mode(f64, data_f64[0..]);
+    //const mode_f32 = mode(f32, data_f32[0..]);
+    //const mode_f64 = mode(f64, data_f64[0..]);
 
     const median_f32 = median(f32, data_f32[0..]);
     const median_f64 = median(f64, data_f64[0..]);
 
-    // const range_f32 = range(f32, data_f32[0..]);
-    // const range_f64 = range(f64, data_f64[0..]);
+    const range_f32 = range(f32, data_f32[0..]);
+    const range_f64 = range(f64, data_f64[0..]);
 
-    // std.debug.print("Mean (f32): {}\n", .{mean_f32});
-    // std.debug.print("Mean (f64): {}\n", .{mean_f64});
-    // std.debug.print("Mode (f32): {}\n", .{mode_f32});
-    // std.debug.print("Mode (f64): {}\n", .{mode_f64});
+    std.debug.print("Mean (f32): {}\n", .{mean_f32});
+    std.debug.print("Mean (f64): {}\n", .{mean_f64});
+    //std.debug.print("Mode (f32): {}\n", .{mode_f32 orelse -1});
+    //std.debug.print("Mode (f64): {}\n", .{mode_f64 orelse -1});
     std.debug.print("Median (f32): {}\n", .{median_f32 orelse -1});
     std.debug.print("Median (f64): {}\n", .{median_f64 orelse -1});
-    // std.debug.print("Range (f32): {}\n", .{range_f32});
-    // std.debug.print("Range (f64): {}\n", .{range_f64});
+    std.debug.print("Range (f32): {}\n", .{range_f32 orelse -1});
+    std.debug.print("Range (f64): {}\n", .{range_f64 orelse -1});
 }
 
 test "what are we testing today" {
