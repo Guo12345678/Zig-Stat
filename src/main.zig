@@ -35,7 +35,7 @@ fn median(comptime T: type, arr: []const T) ?T {
         return sorted_arr[mid];
     }
 }
-//fn mode(comptime T: type, arr: []const T) ?T {
+fn mode(comptime T: type, arr: []const T) ?T {
     if (arr.len == 0) return null;
 
     var frequency_map = std.AutoHashMap(T, usize).init(std.heap.page_allocator);
