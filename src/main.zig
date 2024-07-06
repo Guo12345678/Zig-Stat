@@ -35,6 +35,25 @@ fn median(comptime T: type, arr: []const T) ?T {
         return sorted_arr[mid];
     }
 }
+
+fn IQR(comptime T:type,arr:[]const T) ?T{
+    if(arr.len == 0) return null;
+    var sorted_arr = std.heap.page_allocator.dupe(T, arr) catch return null;
+    defer std.heap.page_allocator.free(sorted_arr);
+
+    // Sort the array
+    std.sort.insertion(T, sorted_arr[0..], {}, std.sort.asc(T));
+
+    const mid = arr.len / 2;
+    const lower_half = sorted_arr[0..mid];
+    const upper_half = if (arr.len % 2 == 0) sorted_arr[mid..] else sorted_arr[mid+1..];
+
+    const q1 = median(T, lower_half) orelse return null;
+    const q3 = median(T, upper_half) orelse return null;
+
+    return q3 - q1;
+}
+
 fn mode(comptime T: type, arr: []const T) ?T {
     if (arr.len == 0) return null;
 
@@ -54,15 +73,15 @@ fn mode(comptime T: type, arr: []const T) ?T {
         frequency_map.put(value, freq) catch {
             return null; // Handle allocation failure
         };
-
         if (freq > max_freq) {
             max_freq = freq;
             mode_value = value;
         }
     }
-
     return mode_value;
 }
+
+
 
 fn range(comptime T: type, arr: []const T) ?T {
     if (arr.len == 0) return null;
@@ -83,7 +102,7 @@ fn range(comptime T: type, arr: []const T) ?T {
 }
 
 pub fn main() void {
-    const data_f32 = [_]f32{ 1.0, 2.0, 3.0, 4.0, 5.0, 7.0 };
+    const data_f32 = [_]f32{ 1.0, 2.5, 3.0, 4.0, 5.0, 7.0 };
     const data_f64 = [_]f64{ 1.0, 2.0, 3.0, 4.0, 5.0, 7.0 };
 
     const mean_f32 = mean(f32, data_f32[0..]);
@@ -91,6 +110,13 @@ pub fn main() void {
 
     //const mode_f32 = mode(f32, data_f32[0..]);
     //const mode_f64 = mode(f64, data_f64[0..]);
+
+
+
+
+
+    const IQR_32 = IQR(f32, data_f32[0..]);
+    const IQR_64 = IQR(f64, data_f64[0..]);
 
     const median_f32 = median(f32, data_f32[0..]);
     const median_f64 = median(f64, data_f64[0..]);
@@ -104,6 +130,8 @@ pub fn main() void {
     //std.debug.print("Mode (f64): {}\n", .{mode_f64 orelse -1});
     std.debug.print("Median (f32): {}\n", .{median_f32 orelse -1});
     std.debug.print("Median (f64): {}\n", .{median_f64 orelse -1});
+    std.debug.print("IQR (f32): {}\n", .{IQR_32 orelse -1});
+    std.debug.print("IQR (f64): {}\n", .{IQR_64 orelse -1});
     std.debug.print("Range (f32): {}\n", .{range_f32 orelse -1});
     std.debug.print("Range (f64): {}\n", .{range_f64 orelse -1});
 }
