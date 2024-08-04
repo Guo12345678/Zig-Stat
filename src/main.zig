@@ -24,7 +24,8 @@ pub fn main() void {
     const range_f64 = set.range(f64, data_f64[0..]);
 
     const dens = ran.dnorm(0.0, 0.0, 1.0);
-    const cdf = ran.pnorm(0.0, 0.0, 1.0);
+    const cdf = ran.pnorm(1.0, 0.0, 1.0);
+    const rno = ran.rnorm(0.0, 1.0);
 
     std.debug.print("Mean (f32): {}\n", .{mean_f32});
     std.debug.print("Mean (f64): {}\n", .{mean_f64});
@@ -38,4 +39,5 @@ pub fn main() void {
     std.debug.print("Range (f64): {}\n", .{range_f64 orelse -1});
     std.debug.print("DNorm: {}\n", .{dens});
     std.debug.print("PNorm: {}\n", .{cdf});
+    std.debug.print("RNorm: {}\n", .{rno});
 }

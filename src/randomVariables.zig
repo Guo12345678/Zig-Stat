@@ -25,6 +25,19 @@ fn erf(x: f64) f64 {
     return if (x >= 0) res else -res;
 }
 
+pub fn rnorm(mean: f64, stddev: f64) f64 {
+    const rGen = std.rand.DefaultPrng;
+    var rnd = rGen.init(0);
+    const num1 = rnd.random().float(f64);
+    const num2 = rnd.random().float(f64);
+
+    // Use Box-Muller transform to get two independent standard normal variates
+    const z0 = std.math.sqrt(-2.0 * @log(num1)) * std.math.cos(2.0 * std.math.pi * num2);
+
+    // Transform the standard normal variate to desired mean and standard deviation
+    return mean + z0 * stddev;
+}
+
 test "dnormTest" {
     const med = dnorm(0.0, 0.0, 1.0);
     try std.testing.expectEqual(med, 0.3989423);
